@@ -22,8 +22,8 @@ class TrophiesStore {
 
     makeAutoObservable(this)
 
-    this.trophies = this.getTrophies()
-    console.log(this.trophies)
+    this.trophies = this.getTrophies() as ITrophy[]
+
     gameEvents.addEventListener('game-started', (event) => {
       this.onGameStarted(event.detail)
     })
@@ -31,13 +31,17 @@ class TrophiesStore {
 
   onGameStarted = async (game: Game) => {
     if (this.contract) {
+      const isEligible = this.isEligible(game)
+
+      if (!isEligible) return
+
       const tx = await this.contract.mintPioneer(1)
       const receipt = await toast.promise(tx.wait(), {
         loading: 'Minting trophy...',
         success: 'Successfuly minted a trophy :D',
         error: 'Failed to mint a trophy :('
       })
-      console.log(receipt)
+
       const tokenId = defaultAbiCoder
         .decode(['uint256'], receipt.logs[0].topics[3])[0]
         // Yeah I know, the danger of overflow, though ID's are incremental here
@@ -54,6 +58,17 @@ class TrophiesStore {
 
       this.saveTrophies()
     }
+  }
+
+  isEligible = (game: Game) => {
+    const user = this.wallet.address
+
+    return !this.trophies.find((trophy) => {
+      const isOwner = trophy.owner === user
+      const isGame = trophy.game.id === game.id
+
+      return isOwner && isGame
+    })
   }
 
   get contract() {
