@@ -5,7 +5,7 @@ import List from '@mui/joy/List'
 import ListItem from '@mui/joy/ListItem'
 import Sheet from '@mui/joy/Sheet'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGamepad, faTrophy } from '@fortawesome/free-solid-svg-icons'
+import { faGamepad, faTrophy, faUser } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { PropsWithChildren } from 'react'
 
@@ -49,6 +49,12 @@ export default function Sidebar() {
         <ListItem>
           <MenuButton label="Trophies" to="/trophies">
             <FontAwesomeIcon icon={faTrophy} />
+          </MenuButton>
+        </ListItem>
+
+        <ListItem>
+          <MenuButton label="Account" to="/account">
+            <FontAwesomeIcon icon={faUser} />
           </MenuButton>
         </ListItem>
       </List>

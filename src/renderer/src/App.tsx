@@ -9,6 +9,7 @@ import { useWallet } from './store/wallet/context'
 import { Grid } from '@mui/joy'
 import Sidebar from './components/Sidebar'
 import Trophies from './views/Trophies'
+import Account from './views/Account'
 
 function App(): JSX.Element {
   const walletStore = useWallet()
@@ -26,6 +27,7 @@ function App(): JSX.Element {
             <Routes>
               <Route path="/" element={<Games />} />
               <Route path="/trophies" element={<Trophies />} />
+              <Route path="/account" element={<Account />} />
             </Routes>
           </Grid>
         </Grid>
