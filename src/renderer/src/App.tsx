@@ -33,7 +33,13 @@ function App(): JSX.Element {
         </Grid>
 
         <WalletModal />
-        <Toaster />
+        <Toaster
+          position="bottom-right"
+          containerStyle={{
+            zIndex: 1000000,
+            fontFamily: '"Public Sans", var(--joy-fontFamily-fallback)'
+          }}
+        />
       </TrophiesProvider>
     </BrowserRouter>
   )

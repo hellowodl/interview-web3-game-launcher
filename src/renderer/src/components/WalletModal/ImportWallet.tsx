@@ -14,6 +14,7 @@ import { IWalletModalAPI } from '.'
 import { observer } from 'mobx-react-lite'
 import { useWallet } from '@renderer/store/wallet/context'
 import { useMutation } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 export interface IImportWalletModalHandlers {
   open: () => void
@@ -37,6 +38,8 @@ const ImportWallet = forwardRef<IImportWalletModalHandlers, IImportWallet>(
     }))
 
     const close = () => {
+      if (isLoading) return
+
       setOpen(false)
 
       walletModalApi.openSelectModal()
@@ -53,7 +56,11 @@ const ImportWallet = forwardRef<IImportWalletModalHandlers, IImportWallet>(
     const importWallet = async () => {
       if (!password || !privateKey) return
 
-      return walletStore.importWallet(privateKey, password)
+      return toast.promise(walletStore.importWallet(privateKey, password), {
+        loading: 'Importing wallet...',
+        success: 'Wallet imported!',
+        error: 'Failed to import wallet'
+      })
     }
 
     const { isLoading, mutate: importWalletMutation } = useMutation({

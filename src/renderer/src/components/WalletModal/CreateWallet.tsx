@@ -14,6 +14,7 @@ import { IWalletModalAPI } from '.'
 import { observer } from 'mobx-react-lite'
 import { useWallet } from '@renderer/store/wallet/context'
 import { useMutation } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 export interface ICreateWalletModalHandlers {
   open: () => void
@@ -36,6 +37,8 @@ const CreateWallet = forwardRef<ICreateWalletModalHandlers, ISelectModal>(
     }))
 
     const close = () => {
+      if (isLoading) return
+
       setOpen(false)
 
       walletModalApi.openSelectModal()
@@ -48,7 +51,11 @@ const CreateWallet = forwardRef<ICreateWalletModalHandlers, ISelectModal>(
     const createWallet = async () => {
       if (!password) return
 
-      return walletStore.createWallet(password)
+      return toast.promise(walletStore.createWallet(password), {
+        loading: 'Creating wallet...',
+        success: 'Wallet created!',
+        error: 'Failed to create wallet'
+      })
     }
 
     const { isLoading, mutate: createWalletMutation } = useMutation({
