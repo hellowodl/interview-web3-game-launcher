@@ -31,6 +31,7 @@ const Game = ({ title, banner, onClick }: IGame) => (
 export default Game
 
 const CustomCard = styled(Card)`
+  cursor: pointer;
   overflow: hidden;
   transform: scale(1);
 
