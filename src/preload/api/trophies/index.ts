@@ -7,14 +7,12 @@ export interface ITrophy {
   tokenId: string
 }
 
-export type Trophies = ITrophy[]
-
-const setTrophies = (trophies: Trophies) => {
+const setTrophies = (trophies: ITrophy[]) => {
   return store.set('trophies', trophies)
 }
 
-const getTrophies = () => {
-  return store.get('trophies') as string
+const getTrophies = (): ITrophy[] => {
+  return (store.get('trophies') as ITrophy[]) || []
 }
 
 export default {
