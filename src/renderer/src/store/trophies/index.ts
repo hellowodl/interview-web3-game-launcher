@@ -89,6 +89,12 @@ class TrophiesStore {
 
     return data || []
   }
+
+  get ownedTrophies() {
+    return this.trophies.filter(
+      (trophy) => trophy.owner === this.wallet.address
+    )
+  }
 }
 
 export default TrophiesStore

@@ -59,7 +59,6 @@ const ImportWallet = forwardRef<IImportWalletModalHandlers, IImportWallet>(
     const { isLoading, mutate: importWalletMutation } = useMutation({
       mutationFn: importWallet,
       onSuccess: () => {
-        setTimeout(() => console.log(walletStore.address), 1000)
         setOpen(false)
       }
     })

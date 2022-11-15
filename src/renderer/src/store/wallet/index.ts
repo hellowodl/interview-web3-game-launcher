@@ -85,7 +85,6 @@ class WalletStore {
   }
 
   #setWallet(wallet: Wallet) {
-    console.log(import.meta.env)
     this.wallet = wallet.connect(
       new providers.JsonRpcProvider(
         'https://ethereum-goerli-rpc.allthatnode.com'
