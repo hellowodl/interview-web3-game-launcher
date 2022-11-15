@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'Public Sans';
+  src: url('@renderer/assets/PublicSans-VariableFont_wght.ttf') format('truetype');
+}
+
+body {
+  background: black
+}
