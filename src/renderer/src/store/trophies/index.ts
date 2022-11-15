@@ -44,8 +44,7 @@ class TrophiesStore {
 
       const tokenId = defaultAbiCoder
         .decode(['uint256'], receipt.logs[0].topics[3])[0]
-        // Yeah I know, the danger of overflow, though ID's are incremental here
-        .toNumber()
+        .toString()
       const owner = receipt.from
 
       const trophy = {
