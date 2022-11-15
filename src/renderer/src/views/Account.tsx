@@ -21,7 +21,7 @@ const Account = observer(() => {
   const { address } = walletStore
 
   const copy = () => {
-    navigator.clipboard.writeText(address)
+    navigator.clipboard.writeText(address || '')
   }
 
   return (
