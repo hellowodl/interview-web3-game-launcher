@@ -8,8 +8,10 @@ Store.initRenderer()
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    minWidth: 845,
+    minHeight: 630,
+    width: 1430,
+    height: 835,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux'
