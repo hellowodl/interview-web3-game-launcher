@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import CreateWallet, { ICreateWalletModalHandlers } from './CreateWallet'
 import LoadWallet, { ILoadWalletModalHandlers } from './LoadWallet'
 import ImportWallet, { IImportWalletModalHandlers } from './ImportWallet'
+import ModalForm from '../ModalForm'
 
 export interface IWalletModalAPI {
   openSelectModal: () => void

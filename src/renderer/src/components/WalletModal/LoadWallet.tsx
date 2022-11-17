@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { useState, useImperativeHandle, forwardRef } from 'react'
+import { useState, useImperativeHandle, forwardRef, useRef } from 'react'
 
 import {
   Modal,
@@ -15,26 +15,18 @@ import { observer } from 'mobx-react-lite'
 import { useWallet } from '@renderer/store/wallet/context'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-
-export interface ILoadWalletModalHandlers {
-  open: () => void
-}
+import ModalForm, { IModalFormHandlers } from '../ModalForm'
 
 interface ISelectModal {
   walletModalApi: IWalletModalAPI
 }
 
-const LoadWallet = forwardRef<ILoadWalletModalHandlers, ISelectModal>(
+const LoadWallet = forwardRef<IModalFormHandlers, ISelectModal>(
   ({ walletModalApi }, ref) => {
     const walletStore = useWallet()
-    const [open, setOpen] = useState(false)
-    const [password, setPassword] = useState('')
-
-    useImperativeHandle(ref, () => ({
-      open() {
-        setOpen(true)
-      }
-    }))
+    const formRef = useRef<typeof ModalForm>(null)
+    formRef.current.close()
+    useImperativeHandle(ref, () => formRef)
 
     const close = () => {
       if (isLoading) return
@@ -44,11 +36,7 @@ const LoadWallet = forwardRef<ILoadWalletModalHandlers, ISelectModal>(
       walletModalApi.openSelectModal()
     }
 
-    const onPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value)
-    }
-
-    const loadWallet = async () => {
+    const loadWallet = async ({ password }: { password: string }) => {
       if (!password) return
 
       return toast.promise(walletStore.loadWallet(password), {
@@ -67,59 +55,20 @@ const LoadWallet = forwardRef<ILoadWalletModalHandlers, ISelectModal>(
     })
 
     return (
-      <Modal open={open} onClose={close}>
-        <ModalDialog
-          aria-labelledby="basic-modal-dialog-title"
-          aria-describedby="basic-modal-dialog-description"
-          sx={{
-            maxWidth: 500,
-            borderRadius: 'md',
-            p: 3,
-            boxShadow: 'lg'
-          }}
-        >
-          <Typography
-            id="basic-modal-dialog-title"
-            component="h2"
-            level="inherit"
-            fontSize="1.25em"
-            mb="0.25em"
-          >
-            Load Wallet
-          </Typography>
-          <Typography
-            id="basic-modal-dialog-description"
-            mt={0.5}
-            mb={2}
-            textColor="text.tertiary"
-          >
-            Fill in your password for wallet decryption
-          </Typography>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault()
-            }}
-          >
-            <Stack spacing={2}>
-              <TextField
-                label="Password"
-                autoFocus
-                required
-                type="password"
-                onChange={onPasswordChange}
-              />
-              <Button
-                type="submit"
-                onClick={() => loadWalletMutation()}
-                loading={isLoading}
-                variant="outlined"
-              >
-                Submit
-              </Button>
-            </Stack>
-          </form>
-        </ModalDialog>
-      </Modal>
+      <ModalForm<'password'>
+        ref={formRef}
+        title="Load Wallet"
+        description="Enter your password to load your wallet"
+        onSubmit={loadWalletMutation}
+        fields={[
+          {
+            key: 'password',
+            label: 'Password'
+          }
+        ]}
+        goBack={close}
+        loading={isLoading}
+      />
     )
   }
 )
